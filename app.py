@@ -44,7 +44,7 @@ with col1:
     family_label = st.selectbox("👪 Riwayat Keluarga Obesitas", list(family_map.keys()))
     favc_label = st.selectbox("🍔 Konsumsi Makanan Kalori Tinggi", list(favc_map.keys()))
     fcvc = st.slider("🥗 Frekuensi Makan Sayur (1–3)", 1.0, 3.0, 2.0)
-    nfc = st.slider("🍟 Fast Food (NFC)", 1.0, 3.0, 2.0)
+    ncp = st.slider("🍽️ Jumlah Makan Utama per Hari (NCP)", 1.0, 4.0, 3.0)
 
 with col2:
     caec_label = st.selectbox("🍪 Frekuensi Ngemil", list(caec_map.keys()))
@@ -66,9 +66,11 @@ scc = scc_map[scc_label]
 calc = calc_map[calc_label]
 mtrans = mtrans_map[mtrans_label]
 
-# Susun input
-input_data = np.array([[gender, age, height, weight, family, favc, fcvc, nfc, caec,
-                        smoke, ch2o, scc, faf, tue, calc, mtrans]])
+# Susun input sesuai urutan fitur pada dataset
+input_data = np.array([[age, gender, height, weight, calc, favc, fcvc, ncp, scc,
+                        smoke, ch2o, family, faf, tue, caec, mtrans]])
+
+# Normalisasi input
 input_scaled = scaler.transform(input_data)
 
 # Prediksi
@@ -77,4 +79,3 @@ if st.button("🔍 Prediksi"):
     prediction = model.predict(input_scaled)[0]
     st.success(f"📊 Kategori Obesitas Anda: **{prediction}**")
     st.markdown("> ⚠️ *Hasil ini hanya sebagai referensi, bukan diagnosis medis.*")
-
